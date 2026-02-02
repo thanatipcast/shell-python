@@ -14,11 +14,10 @@ def main():
         elif command_name == "echo":
                 print(" ".join(args))
         elif command_name == "type":
-            print("args", args)
             if args[0] in shell_builtin:
                 print(f"{args[0]} is a shell builtin")
             else:
-                print(f"invalid command: not found")
+                print(f"{args[0]}: not found")
 
         elif command:
             sys.stdout.write(f"{command}: command not found")
