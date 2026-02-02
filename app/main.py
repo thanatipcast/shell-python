@@ -8,15 +8,23 @@ def main():
         command_split = command.split()
         command_name = command_split[0]
         args = command_split[1:]
+        shell_builtin = ["echo", "exit", "type"]
         if command_name == "exit":
             sys.exit()
         elif command_name == "echo":
                 print(" ".join(args))
+        elif command_name == "type":
+            print("args", args)
+            if args[0] in shell_builtin:
+                print(f"{args[0]} is a shell builtin")
+            else:
+                print(f"invalid command: not found")
+
         elif command:
             sys.stdout.write(f"{command}: command not found")
             print()
             continue   
-   
+
 
 if __name__ == "__main__":
     main()
