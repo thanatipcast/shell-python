@@ -23,8 +23,7 @@ def main():
                 path_split = path_env.split(os.pathsep)
                 for directory in path_split:
                     full_path = os.path.join(directory,args[0])
-                    full_path = full_path + ".exe"
-                    print("full_path", full_path)
+                    full_path = full_path
                     if os.path.isfile(full_path) and os.access(full_path,os.X_OK):
                         print(f"{args[0]} is {full_path}")
                         found = True
