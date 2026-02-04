@@ -1,0 +1,67 @@
+import sys
+import os
+import subprocess
+
+class BaseCommand:
+    def __init__(self, name, args):
+        self.name = name
+        self.args = args
+
+    def __str__(self):
+        return f"{self.name} {self.args}"
+    
+    def __repr__(self):
+        return f"{self.name} {self.args}"
+    
+    def execute(self):
+        raise NotImplementedError(f"{self.__class__.__name__} does not implement execute()")
+    
+    def _search_path(self, file):
+        path_env = os.environ.get("PATH","")
+        path_split = path_env.split(os.pathsep)
+        for directory in path_split:
+            full_path = os.path.join(directory, file)
+            if os.path.isfile(full_path) and os.access(full_path,os.X_OK):
+                return full_path
+            
+        return None
+
+
+
+class ExitCommand(BaseCommand):
+    def execute(self):
+        sys.exit()
+
+
+class EchoCommand(BaseCommand):
+    def execute(self):
+        print(" ".join(self.args))
+
+class TypeCommand(BaseCommand):
+    shell_builtin = ["echo", "exit", "type"]
+    def execute(self):
+        if len(self.args) == 0:
+            return
+        if self.args[0] in self.shell_builtin:
+            print(f"{self.args[0]} is a shell builtin")
+        else:
+            self._find_file()
+
+    def _find_file(self):
+        full_path = self._search_path(self.args[0])
+        if full_path:
+            print(f"{self.args[0]} is {full_path}")
+        else:
+            print(f"{self.args[0]} is not found")
+
+class ExecuteCommand(BaseCommand):
+    def execute(self):
+        # search file then execute if found
+        full_path = self._search_path(self.name)
+        print('self.args', self.args)
+        if full_path:
+            subprocess.run([full_path, self.args])
+        return  sys.stdout.write(f"{self.name}: command not found\n")   
+
+
+        
