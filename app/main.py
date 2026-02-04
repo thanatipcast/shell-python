@@ -1,6 +1,6 @@
 import sys
 import os
-from basecommand import (
+from .basecommand import (
     BaseCommand,
     EchoCommand,
     ExitCommand,

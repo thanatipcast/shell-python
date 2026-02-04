@@ -52,16 +52,14 @@ class TypeCommand(BaseCommand):
         if full_path:
             print(f"{self.args[0]} is {full_path}")
         else:
-            print(f"{self.args[0]} is not found")
+            print(f"{self.args[0]} not found")
 
 class ExecuteCommand(BaseCommand):
     def execute(self):
         # search file then execute if found
         full_path = self._search_path(self.name)
-        print('self.args', self.args)
         if full_path:
-            subprocess.run([full_path, self.args])
-        return  sys.stdout.write(f"{self.name}: command not found\n")   
+            subprocess.run([self.name, *self.args])
+        else:
+            sys.stdout.write(f"{self.name}: command not found\n")   
 
-
-        
