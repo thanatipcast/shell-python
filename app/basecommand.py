@@ -28,17 +28,20 @@ class BaseCommand:
 
 
 
+# starts with exit
 class ExitCommand(BaseCommand):
     def execute(self):
         sys.exit()
 
 
+#starts with echo
 class EchoCommand(BaseCommand):
     def execute(self):
         print(" ".join(self.args))
 
+# starts with type
 class TypeCommand(BaseCommand):
-    shell_builtin = ["echo", "exit", "type"]
+    shell_builtin = ["echo", "exit", "type", "pwd"]
     def execute(self):
         if len(self.args) == 0:
             return
@@ -54,6 +57,14 @@ class TypeCommand(BaseCommand):
         else:
             print(f"{self.args[0]} not found")
 
+# starts with pwd
+
+class PwdCommand(BaseCommand):
+    def execute(self):
+        current_path = os.getcwd()
+        print(f"{current_path}")
+
+# starts with nothing
 class ExecuteCommand(BaseCommand):
     def execute(self):
         # search file then execute if found
@@ -62,4 +73,5 @@ class ExecuteCommand(BaseCommand):
             subprocess.run([self.name, *self.args])
         else:
             sys.stdout.write(f"{self.name}: command not found\n")   
+
 

@@ -5,11 +5,11 @@ from .basecommand import (
     EchoCommand,
     ExitCommand,
     TypeCommand,
-    ExecuteCommand
+    ExecuteCommand,
+    PwdCommand
 )
 
 def main():
-    # TODO: Uncomment the code below to pass the first stage
     while True: 
         command = input("$ ")
         command_split = command.split()
@@ -29,6 +29,8 @@ def command_mapper(command_name, args) -> BaseCommand:
                 c = EchoCommand(command_name, args)
             case "type":
                 c = TypeCommand(command_name, args)
+            case "pwd":
+                c = PwdCommand(command_name, args)
             case _:
                 c = ExecuteCommand(command_name, args)
     return c
