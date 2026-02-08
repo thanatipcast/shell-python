@@ -27,10 +27,6 @@ class BaseCommand:
             
         return None
     
-    def _validate_directory(self, directory):
-        return os.path.isdir(directory)
-     
-
 
 
 # starts with exit
@@ -85,11 +81,10 @@ class CdCommand(BaseCommand):
     def execute(self):
         if len(self.args) == 0:
             return
-        if self._is_absolute_path():
+        # absolute path
+        if self.args[0][0] == "/":
             try:
                 os.chdir(self.args[0])
             except FileNotFoundError:
                 print(f"cd: {self.args[0]}: No such file or directory")
 
-    def _is_absolute_path(self):
-        return self.args[0][0] == "/" and self._validate_directory(self.args[0])
