@@ -6,7 +6,8 @@ from .basecommand import (
     ExitCommand,
     TypeCommand,
     ExecuteCommand,
-    PwdCommand
+    PwdCommand,
+    CdCommand
 )
 
 def main():
@@ -31,6 +32,8 @@ def command_mapper(command_name, args) -> BaseCommand:
                 c = TypeCommand(command_name, args)
             case "pwd":
                 c = PwdCommand(command_name, args)
+            case "cd":
+                c = CdCommand(command_name, args)
             case _:
                 c = ExecuteCommand(command_name, args)
     return c

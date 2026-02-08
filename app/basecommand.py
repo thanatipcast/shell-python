@@ -16,7 +16,8 @@ class BaseCommand:
     def execute(self):
         raise NotImplementedError(f"{self.__class__.__name__} does not implement execute()")
     
-    def _search_path(self, file):
+    # validate if a file name is a file and has access
+    def _validate_file(self, file):
         path_env = os.environ.get("PATH","")
         path_split = path_env.split(os.pathsep)
         for directory in path_split:
@@ -25,6 +26,10 @@ class BaseCommand:
                 return full_path
             
         return None
+    
+    def _validate_directory(self, directory):
+        return os.path.isdir(directory)
+     
 
 
 
@@ -51,7 +56,7 @@ class TypeCommand(BaseCommand):
             self._find_file()
 
     def _find_file(self):
-        full_path = self._search_path(self.args[0])
+        full_path = self._validate_file(self.args[0])
         if full_path:
             print(f"{self.args[0]} is {full_path}")
         else:
@@ -68,10 +73,23 @@ class PwdCommand(BaseCommand):
 class ExecuteCommand(BaseCommand):
     def execute(self):
         # search file then execute if found
-        full_path = self._search_path(self.name)
+        full_path = self._validate_file(self.name)
         if full_path:
             subprocess.run([self.name, *self.args])
         else:
             sys.stdout.write(f"{self.name}: command not found\n")   
 
 
+# starts with cd
+class CdCommand(BaseCommand):
+    def execute(self):
+        if len(self.args) == 0:
+            return
+        if self._is_absolute_path():
+            try:
+                os.chdir(self.args[0])
+            except FileNotFoundError:
+                print(f"cd: {self.args[0]}: No such file or directory")
+
+    def _is_absolute_path(self):
+        return self.args[0][0] == "/" and self._validate_directory(self.args[0])
