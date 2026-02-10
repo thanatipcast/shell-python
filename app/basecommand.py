@@ -26,7 +26,6 @@ class BaseCommand:
                 return full_path
             
         return None
-    
 
 
 # starts with exit
@@ -82,9 +81,8 @@ class CdCommand(BaseCommand):
         if len(self.args) == 0:
             return
         # absolute path
-        if self.args[0][0] == "/":
+        if self.args[0]:
             try:
                 os.chdir(self.args[0])
             except FileNotFoundError:
                 print(f"cd: {self.args[0]}: No such file or directory")
-
