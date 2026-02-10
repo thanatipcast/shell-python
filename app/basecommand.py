@@ -80,8 +80,10 @@ class CdCommand(BaseCommand):
     def execute(self):
         if len(self.args) == 0:
             return
-        # absolute path
-        if self.args[0]:
+        if self.args[0][0] == "~":
+                home = os.environ.get("HOME","")
+                os.chdir(home)
+        else:  
             try:
                 os.chdir(self.args[0])
             except FileNotFoundError:
